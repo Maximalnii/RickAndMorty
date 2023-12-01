@@ -5,20 +5,20 @@
 //  Created by Максим Жуков on 26.11.2023.
 //
 
-import Foundation
 import UIKit
 
+//MARK: - Protocol
+protocol EpisodeCellDelegate: AnyObject {
+    func sendEpisode(with model: Character)
+}
+
 final class EpisodeCollectionViewCustomCell: UICollectionViewCell {
-    
-    //MARK: - Constants
-    
-    private enum Constants {
-       
-    }
     
     //MARK: - UI
     private lazy var episodeImageView: UIImageView = {
         let episodeImageView = UIImageView()
+        episodeImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tap)))
+        episodeImageView.isUserInteractionEnabled = true
         episodeImageView.translatesAutoresizingMaskIntoConstraints = false
         return episodeImageView
     }()
@@ -26,7 +26,7 @@ final class EpisodeCollectionViewCustomCell: UICollectionViewCell {
     private lazy var nameLabel: UILabel = {
         let nameLabel = UILabel()
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        return nameLabel  
+        return nameLabel
     }()
     
     private lazy var nameOfEpisodeView: NameOfEpisodeView = {
@@ -38,8 +38,9 @@ final class EpisodeCollectionViewCustomCell: UICollectionViewCell {
         return nameOfEpisodeView
     }()
     
-    //MARK: - PublicProperty
+    //MARK: - Public property
     private var detailInfo: Character?
+    private weak var delegate: EpisodeCellDelegate?
     
     //MARK: - Init
     override init(frame: CGRect) {
@@ -52,10 +53,49 @@ final class EpisodeCollectionViewCustomCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(with model: DetailedInformation) {
+    //MARK: - Pulic methods
+    @objc func tap() {
+        guard let detailInfo else { return }
+        delegate?.sendEpisode(with: detailInfo)
+    }
+    
+    func configure(with model: DetailedInformation, delegate: EpisodeCellDelegate) {
+        self.delegate = delegate
         nameOfEpisodeView.configureNameOfEpisodeView(with: model.name, episodeName: model.episode)
-        
         fetchDetailInfo(with: model.characters)
+    }
+    
+    //MARK: - Private methods
+    private func setupViwes() {
+        contentView.layer.cornerRadius = 8
+        contentView.layer.shadowOffset = .init(width: 5, height: 5)
+        contentView.layer.shadowColor = UIColor.black.cgColor
+        contentView.addSubview(episodeImageView)
+        contentView.addSubview(nameLabel)
+        contentView.addSubview(nameOfEpisodeView)
+    }
+    
+    private func setupConstraints() {
+        NSLayoutConstraint.activate([
+            episodeImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            episodeImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            episodeImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            episodeImageView.heightAnchor.constraint(equalToConstant: 232)
+        ])
+        
+        NSLayoutConstraint.activate([
+            nameLabel.topAnchor.constraint(equalTo: episodeImageView.bottomAnchor, constant: 10),
+            nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
+            nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
+            nameLabel.heightAnchor.constraint(equalToConstant: 30)
+        ])
+        
+        NSLayoutConstraint.activate([
+            nameOfEpisodeView.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 12),
+            nameOfEpisodeView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            nameOfEpisodeView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            nameOfEpisodeView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        ])
     }
     
     private func fetchDetailInfo(with characters: [String]) {
@@ -89,39 +129,5 @@ final class EpisodeCollectionViewCustomCell: UICollectionViewCell {
             }
         }
         dataTask.resume()
-    }
-    
-    //MARK: - Private methods
-    private func setupViwes() {
-        contentView.layer.cornerRadius = 8
-        contentView.layer.shadowOffset = .init(width: 5, height: 5)
-        contentView.layer.shadowColor = UIColor.black.cgColor
-        
-        contentView.addSubview(episodeImageView)
-        contentView.addSubview(nameLabel)
-        contentView.addSubview(nameOfEpisodeView)
-    }
-
-    private func setupConstraints() {
-        NSLayoutConstraint.activate([
-            episodeImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            episodeImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            episodeImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            episodeImageView.heightAnchor.constraint(equalToConstant: 232)
-        ])
-        
-        NSLayoutConstraint.activate([
-            nameLabel.topAnchor.constraint(equalTo: episodeImageView.bottomAnchor, constant: 10),
-            nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
-            nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
-            nameLabel.heightAnchor.constraint(equalToConstant: 30)
-        ])
-        
-        NSLayoutConstraint.activate([
-            nameOfEpisodeView.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 12),
-            nameOfEpisodeView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            nameOfEpisodeView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            nameOfEpisodeView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-        ])
     }
 }

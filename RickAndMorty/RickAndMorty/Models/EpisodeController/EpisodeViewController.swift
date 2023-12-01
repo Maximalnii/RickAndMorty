@@ -7,14 +7,12 @@
 
 import UIKit
 
-//MARK: - Final class
-
 final class EpisodeViewController: UIViewController {
     
     //MARK: - Constants
     private enum Constants {
         static let logo = "logo"
-        static let searchBarPlaceholder = "Name or episode"
+        static let searchBarPlaceholder = "Name or episode (ex.S01E01)..."
         static let cell = "Cell"
         static let mainUrl = "https://rickandmortyapi.com/api/episode"
     }
@@ -50,7 +48,7 @@ final class EpisodeViewController: UIViewController {
         return episodeCollectionView
     }()
     
-    //MARK: - PrivateProperty
+    //MARK: - Private property
     private var episodesModel: Episodes? {
         didSet {
             DispatchQueue.main.async {
@@ -59,7 +57,7 @@ final class EpisodeViewController: UIViewController {
         }
     }
     
-    //MARK: - Life Cycle
+    //MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
@@ -70,7 +68,6 @@ final class EpisodeViewController: UIViewController {
     //MARK: - Private methods
     private func setupViews() {
         view.backgroundColor = .white
-        
         view.addSubview(logoImageView)
         view.addSubview(searchBar)
         view.addSubview(episodeCollectionView)
@@ -128,21 +125,28 @@ final class EpisodeViewController: UIViewController {
 
 //MARK: - UICollectionViewDelegate
 extension EpisodeViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-   
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         self.episodesModel?.results.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.cell, for: indexPath) as? EpisodeCollectionViewCustomCell,
-        let episodes = episodesModel?.results else { return UICollectionViewCell() }
+              let episodes = episodesModel?.results else { return UICollectionViewCell() }
         let episode = episodes[indexPath.item]
-        cell.configure(with: episode)
+        cell.configure(with: episode, delegate: self)
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         CGSize(width: collectionView.bounds.width, height: 357)
+    }
+}
+
+extension EpisodeViewController: EpisodeCellDelegate {
+    func sendEpisode(with model: Character) {
+        let characterDetailsVC = CharacterDetailsViewController(character: model)
+        navigationController?.pushViewController(characterDetailsVC, animated: true)
     }
 }
 

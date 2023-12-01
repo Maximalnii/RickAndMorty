@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 struct Character: Decodable {
     let id: Int
     let name: String
@@ -19,7 +18,6 @@ struct Character: Decodable {
     let location: Location
     let image: String
     let episode: [String]
-    
     
     struct Origin: Decodable {
         let name: String
