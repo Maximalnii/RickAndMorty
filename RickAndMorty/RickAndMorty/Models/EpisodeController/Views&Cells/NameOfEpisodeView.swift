@@ -5,20 +5,17 @@
 //  Created by Максим Жуков on 27.11.2023.
 //
 
-import Foundation
 import UIKit
 
 final class NameOfEpisodeView: UIView {
     
     //MARK: - Constants
-    
     private enum Constants {
         static let screenImage = "screenImage"
         static let likeImage = "likeImage"
     }
     
     //MARK: - UI
-    
     private lazy var screenImageView: UIImageView = {
         let screenImageView = UIImageView()
         screenImageView.image = UIImage(named: Constants.screenImage)
@@ -41,7 +38,6 @@ final class NameOfEpisodeView: UIView {
     
     
     //MARK: - Init
-    
     init() {
         super.init(frame: .zero)
         setupViwes()
@@ -53,12 +49,11 @@ final class NameOfEpisodeView: UIView {
     }
     
     //MARK: - Pulic methods
-    
     func configureNameOfEpisodeView(with name: String, episodeName: String) {
         episodNameLabel.text = "\(name) | \(episodeName)"
     }
+    
     //MARK: - Private methods
-
     private func setupViwes() {
         addSubview(screenImageView)
         addSubview(episodNameLabel)
@@ -76,7 +71,7 @@ final class NameOfEpisodeView: UIView {
         NSLayoutConstraint.activate([
             episodNameLabel.topAnchor.constraint(equalTo: topAnchor, constant: 28.4),
             episodNameLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 65.76),
-            episodNameLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -87.68),
+            episodNameLabel.trailingAnchor.constraint(equalTo: likeImageView.leadingAnchor, constant: -5),
             episodNameLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -19.88)
         ])
         

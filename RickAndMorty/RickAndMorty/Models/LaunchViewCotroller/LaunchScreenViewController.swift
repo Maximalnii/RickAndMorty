@@ -7,7 +7,6 @@
 
 import UIKit
 
-//MARK: - Final class
 final class LaunchScreenViewController: UIViewController {
     
     //MARK: - Constants
@@ -31,7 +30,7 @@ final class LaunchScreenViewController: UIViewController {
         return loadingComponentImageView
     }()
     
-    //MARK: - LIFE CYCLE
+    //MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         vcSetting()
@@ -80,16 +79,3 @@ final class LaunchScreenViewController: UIViewController {
         ])
     }
 }
-
-//MARK: - Extentions
-extension UIView{
-    func rotate() {
-        let rotation : CABasicAnimation = CABasicAnimation(keyPath: "transform.rotation.z")
-        rotation.toValue = NSNumber(value: Double.pi * 2)
-        rotation.duration = 1
-        rotation.isCumulative = true
-        rotation.repeatCount = Float.greatestFiniteMagnitude
-        self.layer.add(rotation, forKey: "rotationAnimation")
-    }
-}
-

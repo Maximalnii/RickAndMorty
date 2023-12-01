@@ -7,7 +7,6 @@
 
 import UIKit
 
-//MARK: - Final class
 final class TabBarController: UITabBarController {
     
     //MARK: - Constants
@@ -16,7 +15,7 @@ final class TabBarController: UITabBarController {
         static let favourites = "favourites"
     }
     
-    //MARK: - LIFE CYCLE
+    //MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         generateTabBar()

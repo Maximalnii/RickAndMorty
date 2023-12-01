@@ -1,17 +1,15 @@
 {
   "images" : [
     {
-      "filename" : "favouritesRed.png",
+      "filename" : "Image.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "favouritesRed 1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "favouritesRed 2.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
